@@ -17,6 +17,7 @@
     "@remix-run/cloudflare-pages": "^2.8.1",
     "@remix-run/react": "^2.8.1",
     "@spotify/web-api-ts-sdk": "^1.2.0",
+    "callum-util": "^1.1.1",
     "isbot": "^4.1.0",
     "miniflare": "^3.20231030.4",
     "react": "^18.2.0",
