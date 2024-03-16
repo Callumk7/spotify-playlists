@@ -18,6 +18,7 @@ export const loader = async ({request}: LoaderFunctionArgs) => {
 
   if (session.get("token")) {
     console.log(session.get("token"))
+    console.log(session.get("userId"))
   }
   return null
 }

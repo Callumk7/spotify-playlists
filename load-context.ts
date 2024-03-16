@@ -6,9 +6,9 @@ import { type PlatformProxy } from "wrangler";
 // Need this empty interface so that typechecking passes
 // even if no `wrangler.toml` exists.
 interface Env {
-	client_id: string;
-	redirect_uri: string;	
-	client_secret: string;
+	SPOTIFY_CLIENT_ID: string;
+	SPOTIFY_CLIENT_SECRET: string;	
+	REDIRECT_URI: string;
 }
 
 type Cloudflare = Omit<PlatformProxy<Env>, "dispose">;
