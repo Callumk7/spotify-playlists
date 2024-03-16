@@ -1,4 +1,5 @@
-import type { MetaFunction } from "@remix-run/cloudflare";
+import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/cloudflare";
+import { getSession } from "~/sessions";
 
 export const meta: MetaFunction = () => {
   return [
@@ -9,6 +10,17 @@ export const meta: MetaFunction = () => {
     },
   ];
 };
+
+export const loader = async ({request}: LoaderFunctionArgs) => {
+    const session = await getSession(
+    request.headers.get("Cookie")
+  );
+
+  if (session.get("token")) {
+    console.log(session.get("token"))
+  }
+  return null
+}
 
 export default function Index() {
   return (
