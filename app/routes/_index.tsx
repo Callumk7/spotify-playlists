@@ -1,7 +1,15 @@
-import { json, type LoaderFunctionArgs, type MetaFunction } from "@remix-run/cloudflare";
-import { useLoaderData } from "@remix-run/react";
+import {
+	ActionFunctionArgs,
+	json,
+	redirect,
+	type LoaderFunctionArgs,
+	type MetaFunction,
+} from "@remix-run/cloudflare";
+import { useFetcher, useLoaderData } from "@remix-run/react";
+import { uuidv4 } from "callum-util";
+import { eq } from "drizzle-orm";
 import { createDrizzle } from "~/db";
-import { users } from "~/db/schema";
+import { groups, users, usersToGroups } from "~/db/schema";
 import { getSession } from "~/sessions";
 
 export const meta: MetaFunction = () => {
@@ -17,45 +25,41 @@ export const meta: MetaFunction = () => {
 export const loader = async ({ request, context }: LoaderFunctionArgs) => {
 	const session = await getSession(request.headers.get("Cookie"));
 
-	if (session.get("token")) {
-		console.log(session.get("token"));
-		console.log(session.get("userId"));
+	if (!session.get("token")) {
+		return redirect("/login");
 	}
 
-	const db = createDrizzle(context.cloudflare.env.DB);
-	const firstUser = await db
-		.insert(users)
-		.values({
-			name: "First user",
-		})
-		.returning()
-		.onConflictDoNothing();
+	const userId = session.get("userId");
+	const token = session.get("token");
 
-	return json({ firstUser });
+	const db = createDrizzle(context.cloudflare.env.DB);
+	const userGroups = await db.query.usersToGroups.findMany({
+		where: eq(usersToGroups.userId, userId!),
+		with: {
+			group: true,
+		},
+	});
+
+	return json({ userGroups });
 };
 
 export default function Index() {
-	const { firstUser } = useLoaderData<typeof loader>();
-	console.log(firstUser);
+	const { userGroups } = useLoaderData<typeof loader>();
+	const fetcher = useFetcher();
 	return (
-		<div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
-			<h1>Welcome to Remix (with Vite and Cloudflare)</h1>
-			<ul>
-				<li>
-					<a
-						target="_blank"
-						href="https://developers.cloudflare.com/pages/framework-guides/deploy-a-remix-site/"
-						rel="noreferrer"
-					>
-						Cloudflare Pages Docs - Remix guide
-					</a>
-				</li>
-				<li>
-					<a target="_blank" href="https://remix.run/docs" rel="noreferrer">
-						Remix Docs
-					</a>
-				</li>
-			</ul>
-		</div>
+		<main className="w-4/5 mx-auto">
+			<h1>Groups</h1>
+			<div>
+				{userGroups.map((group) => (
+					<div key={group.groupId}>{group.group.name}</div>
+				))}
+			</div>
+			<div>
+				<fetcher.Form method="POST" action="/groups">
+					<input type="text" name="group_name" />
+					<button type="submit">create new group</button>
+				</fetcher.Form>
+			</div>
+		</main>
 	);
 }

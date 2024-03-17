@@ -23,11 +23,21 @@ export const action = async ({ context }: ActionFunctionArgs) => {
 
 export default function SpotifyAuthPage() {
 	return (
-		<div>
-			<div>This is the spotify auth page</div>
-			<form method="POST">
-				<button type="submit">test</button>
-			</form>
-		</div>
+		<main className="w-1/2 mx-auto">
+			<div className="space-y-9">
+				<h1 className="text-center">This is the spotify auth page</h1>
+				<div className="bg-slate-800 p-7 rounded-lg w-11/12 mx-auto min-h-40 text-slate-100 flex flex-col justify-between h-full">
+					<h2>Login with Spotify</h2>
+					<form method="POST">
+						<button
+							className="bg-lime-300 text-slate-950 rounded-sm p-2 hover:bg-lime-400"
+							type="submit"
+						>
+							Login
+						</button>
+					</form>
+				</div>
+			</div>
+		</main>
 	);
 }

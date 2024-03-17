@@ -15,7 +15,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 				<Meta />
 				<Links />
 			</head>
-			<body>
+			<body className="bg-slate-50 text-slate-950">
 				<Navigation links={["login", "playlists"]} />
 				{children}
 				<ScrollRestoration />

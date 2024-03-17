@@ -2,6 +2,10 @@ import { LoaderFunctionArgs, redirect } from "@remix-run/cloudflare";
 import { Link } from "@remix-run/react";
 import { commitSession, getSession } from "~/sessions";
 import { Buffer } from "node:buffer";
+import { createDrizzle } from "~/db";
+import { eq } from "drizzle-orm";
+import { users } from "~/db/schema";
+import { uuidv4 } from "callum-util";
 
 // add these to something more secure
 
@@ -63,12 +67,34 @@ export const loader = async ({ request, context }: LoaderFunctionArgs) => {
 
 	const userResponse = (await res.json()) as { id: string };
 	const userId = userResponse.id;
-	console.log(userId);
 
 	const session = await getSession(request.headers.get("Cookie"));
+	// check for an entry in d1
+	const db = createDrizzle(context.cloudflare.env.DB);
+	const internalUser = await db.query.users.findFirst({
+		where: eq(users.spotifyId, userId),
+	});
+
+	if (!internalUser) {
+		const newId = `user_${uuidv4()}`;
+		const newInternalUser = await db
+			.insert(users)
+			.values({
+				id: newId,
+				token: token,
+				spotifyId: userId,
+			})
+			.returning();
+
+		if (newInternalUser[0].id !== newId) {
+			throw new Error("Error creating user in database");
+		}
+
+		session.set("userId", newId);
+	}
 
 	session.set("token", token);
-	session.set("userId", userId);
+	session.set("spotifyId", userId);
 
 	return redirect("/", {
 		headers: {
