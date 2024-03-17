@@ -1,23 +1,11 @@
 import { LoaderFunctionArgs, redirect } from "@remix-run/cloudflare";
 import { Link } from "@remix-run/react";
 import { commitSession, getSession } from "~/sessions";
-import { Buffer } from "node:buffer";
 import { createDrizzle } from "~/db";
 import { eq } from "drizzle-orm";
 import { users } from "~/db/schema";
 import { uuidv4 } from "callum-util";
 import { authenticateUserWithSpotify } from "~/services/spotify";
-
-
-// add these to something more secure
-
-interface SpotifyAuthResponse {
-	access_token: string;
-	token_type: string;
-	scope: string;
-	expires_in: number;
-	refresh_token: string;
-}
 
 export const loader = async ({ request, context }: LoaderFunctionArgs) => {
 	console.log("We have got here");
@@ -59,7 +47,7 @@ export const loader = async ({ request, context }: LoaderFunctionArgs) => {
 			.insert(users)
 			.values({
 				id: newId,
-				token: token,
+				token: token.access_token,
 				spotifyId: userId,
 			})
 			.returning();

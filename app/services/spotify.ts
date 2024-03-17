@@ -1,12 +1,5 @@
-import { SpotifyApi } from "@spotify/web-api-ts-sdk";
-
-interface SpotifyAuthResponse {
-	access_token: string;
-	token_type: string;
-	scope: string;
-	expires_in: number;
-	refresh_token: string;
-}
+import { AccessToken, SpotifyApi } from "@spotify/web-api-ts-sdk";
+import { Buffer } from "node:buffer";
 
 const SPOTIFY_BASE_URL = "https://api.spotify.com/v1";
 const SPOTIFY_AUTH_URL = "https://accounts.spotify.com/api/token";
@@ -35,14 +28,12 @@ export const authenticateUserWithSpotify = async (
 		body: body,
 	});
 
-	const jsonResponse = (await auth.json()) as SpotifyAuthResponse;
-
-	const token = jsonResponse.access_token;
+	const token = (await auth.json()) as AccessToken;
 
 	// lets get the user ID
 	const res = await fetch("https://api.spotify.com/v1/me", {
 		headers: {
-			Authorization: `Bearer ${token}`,
+			Authorization: `Bearer ${token.access_token}`,
 		},
 	});
 

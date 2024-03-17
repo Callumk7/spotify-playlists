@@ -16,7 +16,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 				<Links />
 			</head>
 			<body className="bg-slate-50 text-slate-950">
-				<Navigation links={["login", "playlists"]} />
+				<Navigation links={["login", "playlists", "groups"]} />
 				{children}
 				<ScrollRestoration />
 				<Scripts />

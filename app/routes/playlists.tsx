@@ -1,41 +1,19 @@
 import { LoaderFunctionArgs, json, redirect } from "@remix-run/cloudflare";
 import { useLoaderData } from "@remix-run/react";
-import { Playlist } from "@spotify/web-api-ts-sdk";
 import { getSession } from "~/sessions";
 import { SpotifyApi } from "@spotify/web-api-ts-sdk";
 
 export const loader = async ({ request, context }: LoaderFunctionArgs) => {
+	const client_id = context.cloudflare.env.SPOTIFY_CLIENT_ID;
+
 	const session = await getSession(request.headers.get("Cookie"));
 
-	const client_id = context.cloudflare.env.SPOTIFY_CLIENT_ID;
-	const redirect_uri = context.cloudflare.env.REDIRECT_URI;
-	const scope =
-		"user-top-read playlist-read-private playlist-read-collaborative user-read-email";
-  
-	const spotify = SpotifyApi.withUserAuthorization(
-		client_id,
-		redirect_uri,
-		scope.split(" "),
-	);
-
-  console.log("playlists route, we got past creating a spotify instance")
-
 	if (session.get("token")) {
-    console.log("we have a token")
 		const token = session.get("token")!;
 		const spotifyId = session.get("spotifyId")!;
 
+		const spotify = SpotifyApi.withAccessToken(client_id, token);
 		const playlists = await spotify.playlists.getUsersPlaylists(spotifyId, 5);
-
-		// const res = await fetch(`https://api.spotify.com/v1/users/${spotifyId}/playlists`, {
-		// 	headers: {
-		// 		Authorization: `Bearer ${token}`,
-		// 	},
-		// });
-		// const resJson = (await res.json()) as { items: Playlist[] };
-		// console.log(resJson);
-
-		console.log(playlists);
 
 		return json({ playlists });
 	}
