@@ -4,6 +4,7 @@ import { randomString } from "~/util/random-string";
 export const action = async ({ context }: ActionFunctionArgs) => {
 	const client_id = context.cloudflare.env.SPOTIFY_CLIENT_ID;
 	const redirect_uri = context.cloudflare.env.REDIRECT_URI;
+	// const redirect_uri = "http://localhost:5173/callback";
 
 	const state = randomString(16);
 	const scope =

@@ -5,3 +5,8 @@ compatibility_flags = ["nodejs_compat"]
 SPOTIFY_CLIENT_ID = "73b8fc71d93f4977acb3103bbd69a1b5"
 SPOTIFY_CLIENT_SECRET = "dad43a6e04054abd8905e0cc5683187a"
 REDIRECT_URI = "http://localhost:8788/callback"
+
+[[d1_databases]]
+binding = "DB"                                       # i.e. available in your Worker on env.DB
+database_name = "spotify-d1-prod"
+database_id = "3d81f267-495a-4f15-843c-97dd827ba61c"
