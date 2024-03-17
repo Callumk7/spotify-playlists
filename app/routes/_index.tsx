@@ -5,11 +5,10 @@ import {
 	type LoaderFunctionArgs,
 	type MetaFunction,
 } from "@remix-run/cloudflare";
-import { useFetcher, useLoaderData } from "@remix-run/react";
-import { uuidv4 } from "callum-util";
+import { Link, useFetcher, useLoaderData } from "@remix-run/react";
 import { eq } from "drizzle-orm";
 import { createDrizzle } from "~/db";
-import { groups, users, usersToGroups } from "~/db/schema";
+import { usersToGroups } from "~/db/schema";
 import { getSession } from "~/sessions";
 
 export const meta: MetaFunction = () => {
@@ -25,7 +24,7 @@ export const meta: MetaFunction = () => {
 export const loader = async ({ request, context }: LoaderFunctionArgs) => {
 	const session = await getSession(request.headers.get("Cookie"));
 
-	if (!session.get("token")) {
+	if (!session.get("token") || !session.get("userId")) {
 		return redirect("/login");
 	}
 
@@ -51,7 +50,9 @@ export default function Index() {
 			<h1>Groups</h1>
 			<div>
 				{userGroups.map((group) => (
-					<div key={group.groupId}>{group.group.name}</div>
+					<Link to={`/groups/${group.groupId}`} key={group.groupId}>
+						{group.group.name}
+					</Link>
 				))}
 			</div>
 			<div>

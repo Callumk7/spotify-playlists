@@ -12,9 +12,9 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
 	if (session.get("token")) {
 		const token = session.get("token")!;
-		const userId = session.get("userId")!;
+		const spotifyId = session.get("spotifyId")!;
 
-		const res = await fetch(`https://api.spotify.com/v1/users/${userId}/playlists`, {
+		const res = await fetch(`https://api.spotify.com/v1/users/${spotifyId}/playlists`, {
 			headers: {
 				Authorization: `Bearer ${token}`,
 			},

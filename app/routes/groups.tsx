@@ -1,4 +1,5 @@
 import { ActionFunctionArgs, redirect, json } from "@remix-run/cloudflare";
+import { Outlet } from "@remix-run/react";
 import { uuidv4 } from "callum-util";
 import { createDrizzle } from "~/db";
 import { groups, usersToGroups } from "~/db/schema";
@@ -34,3 +35,12 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
 
 	return json({ newGroup });
 };
+
+export default function GroupsRoute() {
+	return (
+		<main>
+			<p>Groups Route</p>
+			<Outlet />
+		</main>
+	);
+}

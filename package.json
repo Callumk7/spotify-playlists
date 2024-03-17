@@ -14,6 +14,7 @@
 		"generate": "drizzle-kit generate:sqlite"
 	},
 	"dependencies": {
+		"@ariakit/react": "^0.4.3",
 		"@remix-run/cloudflare": "^2.8.1",
 		"@remix-run/cloudflare-pages": "^2.8.1",
 		"@remix-run/react": "^2.8.1",

@@ -5,10 +5,14 @@
 	},
 	"linter": {
 		"enabled": true,
+		"ignore": ["./app/entry.*"],
 		"rules": {
 			"recommended": true,
 			"style": {
-				"noNonNullAssertion": "warn"
+				"noNonNullAssertion": "off"
+			},
+			"complexity": {
+				"noForEach": "warn"
 			}
 		}
 	},

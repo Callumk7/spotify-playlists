@@ -21,7 +21,6 @@ export const loader = async ({ request, context }: LoaderFunctionArgs) => {
 	console.log("We have got here");
 	const client_id = context.cloudflare.env.SPOTIFY_CLIENT_ID;
 	const redirect_uri = context.cloudflare.env.REDIRECT_URI;
-	// const redirect_uri = "http://localhost:5173/callback";
 	const client_secret = context.cloudflare.env.SPOTIFY_CLIENT_SECRET;
 
 	const url = new URL(request.url);
@@ -91,7 +90,9 @@ export const loader = async ({ request, context }: LoaderFunctionArgs) => {
 		}
 
 		session.set("userId", newId);
-	}
+	} else {
+    session.set("userId", internalUser.id);
+  }
 
 	session.set("token", token);
 	session.set("spotifyId", userId);
