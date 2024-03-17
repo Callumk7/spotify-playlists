@@ -36,37 +36,14 @@ export const loader = async ({ request, context }: LoaderFunctionArgs) => {
 		return redirect("/");
 	}
 
-	const body = new URLSearchParams({
-		code: code,
-		redirect_uri: redirect_uri,
-		grant_type: "authorization_code",
-	});
+	const { token, userId } = await authenticateUserWithSpotify(
+		client_id,
+		client_secret,
+		code,
+		redirect_uri,
+	);
 
-	const auth = await fetch("https://accounts.spotify.com/api/token", {
-		method: "POST",
-		headers: {
-			Authorization: `Basic ${Buffer.from(`${client_id}:${client_secret}`).toString(
-				"base64",
-			)}`,
-			"Content-Type": "application/x-www-form-urlencoded",
-		},
-		body: body,
-	});
-
-	const jsonResponse = (await auth.json()) as SpotifyAuthResponse;
-
-	const token = jsonResponse.access_token;
-
-	// lets get the user ID
-	const res = await fetch("https://api.spotify.com/v1/me", {
-		headers: {
-			Authorization: `Bearer ${token}`,
-		},
-	});
-
-	const userResponse = (await res.json()) as { id: string };
-	const userId = userResponse.id;
-
+	// TODO: this should be its own function
 	const session = await getSession(request.headers.get("Cookie"));
 	// check for an entry in d1
 	const db = createDrizzle(context.cloudflare.env.DB);
@@ -91,8 +68,8 @@ export const loader = async ({ request, context }: LoaderFunctionArgs) => {
 
 		session.set("userId", newId);
 	} else {
-    session.set("userId", internalUser.id);
-  }
+		session.set("userId", internalUser.id);
+	}
 
 	session.set("token", token);
 	session.set("spotifyId", userId);
