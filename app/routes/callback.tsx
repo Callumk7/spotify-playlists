@@ -6,6 +6,8 @@ import { createDrizzle } from "~/db";
 import { eq } from "drizzle-orm";
 import { users } from "~/db/schema";
 import { uuidv4 } from "callum-util";
+import { authenticateUserWithSpotify } from "~/services/spotify";
+
 
 // add these to something more secure
 
