@@ -1,5 +1,6 @@
 import { ActionFunctionArgs, redirect, json } from "@remix-run/cloudflare";
 import { Outlet } from "@remix-run/react";
+import { square } from "callum-typescript-test";
 import { uuidv4 } from "callum-util";
 import { createDrizzle } from "~/db";
 import { groups, usersToGroups } from "~/db/schema";
@@ -14,6 +15,9 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
 	}
 
 	const userId = session.get("userId")!;
+
+  const x = square(35);
+  console.log(x);
 
 	const form = await request.formData();
 	const groupName = form.get("group_name");

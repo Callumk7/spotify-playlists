@@ -20,6 +20,9 @@ dependencies:
   '@spotify/web-api-ts-sdk':
     specifier: ^1.2.0
     version: 1.2.0
+  callum-typescript-test:
+    specifier: ^1.0.0
+    version: 1.0.0
   callum-util:
     specifier: ^1.1.1
     version: 1.1.1
@@ -2356,6 +2359,10 @@ packages:
       get-intrinsic: 1.2.4
       set-function-length: 1.2.2
     dev: true
+
+  /callum-typescript-test@1.0.0:
+    resolution: {integrity: sha512-FeG0am9uaLMHf2UMF/F/smx3khg/CKuFf2lWNtkowlQb9s/o3i/oz/cEiPyIZXxNzb2vrBwVbeiFUvrn97ktOA==}
+    dev: false
 
   /callum-util@1.1.1:
     resolution: {integrity: sha512-xAN6W0330yFJGrXlEkmE6BJmnVsmC8/BP9yfSPeYCMGh64evEgKm32gmkez2NdYRP8llx15tCaEvBv81m1p8tQ==}

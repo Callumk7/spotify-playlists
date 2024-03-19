@@ -19,6 +19,7 @@
 		"@remix-run/cloudflare-pages": "^2.8.1",
 		"@remix-run/react": "^2.8.1",
 		"@spotify/web-api-ts-sdk": "^1.2.0",
+		"callum-typescript-test": "^1.0.0",
 		"callum-util": "^1.1.1",
 		"drizzle-orm": "^0.30.2",
 		"isbot": "^4.1.0",

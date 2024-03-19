@@ -1,6 +1,13 @@
 import { ActionFunctionArgs, redirect } from "@remix-run/cloudflare";
 import { SpotifyApi } from "@spotify/web-api-ts-sdk";
+import { square } from "callum-typescript-test";
 import { randomString } from "~/util/random-string";
+
+export const loader = () => {
+	const x = square(35);
+	console.log(x);
+	return null;
+};
 
 export const action = async ({ context }: ActionFunctionArgs) => {
 	const client_id = context.cloudflare.env.SPOTIFY_CLIENT_ID;

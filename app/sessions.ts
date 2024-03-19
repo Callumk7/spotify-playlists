@@ -1,7 +1,7 @@
 import { createCookieSessionStorage } from "@remix-run/cloudflare"; // or cloudflare/deno
 import { AccessToken } from "@spotify/web-api-ts-sdk";
 
-type SessionData = {
+export type SessionData = {
 	userId: string;
 	token: AccessToken;
 	spotifyId: string;

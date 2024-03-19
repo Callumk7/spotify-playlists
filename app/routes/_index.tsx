@@ -1,5 +1,4 @@
 import {
-	ActionFunctionArgs,
 	json,
 	redirect,
 	type LoaderFunctionArgs,
@@ -7,6 +6,7 @@ import {
 } from "@remix-run/cloudflare";
 import { Link, useFetcher, useLoaderData } from "@remix-run/react";
 import { eq } from "drizzle-orm";
+import { MainContainer } from "~/components/main-container";
 import { createDrizzle } from "~/db";
 import { usersToGroups } from "~/db/schema";
 import { getSession } from "~/sessions";
@@ -46,9 +46,9 @@ export default function Index() {
 	const { userGroups } = useLoaderData<typeof loader>();
 	const fetcher = useFetcher();
 	return (
-		<main className="w-4/5 mx-auto">
+		<MainContainer>
 			<h1>Groups</h1>
-			<div>
+			<div className="flex flex-col gap-4">
 				{userGroups.map((group) => (
 					<Link to={`/groups/${group.groupId}`} key={group.groupId}>
 						{group.group.name}
@@ -61,6 +61,6 @@ export default function Index() {
 					<button type="submit">create new group</button>
 				</fetcher.Form>
 			</div>
-		</main>
+		</MainContainer>
 	);
 }
