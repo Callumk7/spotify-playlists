@@ -1,4 +1,11 @@
-import { Links, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData } from "@remix-run/react";
+import {
+	Links,
+	Meta,
+	Outlet,
+	Scripts,
+	ScrollRestoration,
+	useLoaderData,
+} from "@remix-run/react";
 import styles from "~/tw.css?url";
 import { Navigation } from "./components/nav";
 
@@ -7,7 +14,6 @@ export const links = () => {
 };
 
 export function Layout({ children }: { children: React.ReactNode }) {
-  
 	return (
 		<html lang="en">
 			<head>
@@ -16,7 +22,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 				<Meta />
 				<Links />
 			</head>
-			<body className="bg-slate-50 text-slate-950">
+			<body>
 				<Navigation links={["login", "playlists", "groups"]} />
 				{children}
 				<ScrollRestoration />

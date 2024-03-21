@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm";
-import { text, integer, sqliteTable, primaryKey } from "drizzle-orm/sqlite-core";
+import { text, sqliteTable, primaryKey } from "drizzle-orm/sqlite-core";
 
 export const users = sqliteTable("users", {
 	id: text("id").notNull().primaryKey(), // internal user id
@@ -19,6 +19,7 @@ export const groups = sqliteTable("groups", {
 
 export const groupsRelations = relations(groups, ({ many }) => ({
 	users: many(usersToGroups),
+	tracks: many(tracksToGroups),
 }));
 
 export const usersToGroups = sqliteTable(
@@ -40,5 +41,43 @@ export const usersToGroupsRelations = relations(usersToGroups, ({ one }) => ({
 	group: one(groups, {
 		fields: [usersToGroups.groupId],
 		references: [groups.id],
+	}),
+}));
+
+export const tracks = sqliteTable("tracks", {
+	id: text("id").notNull().primaryKey(), // spotify id
+	name: text("name").notNull(),
+	artist: text("artist"),
+	album: text("album"),
+});
+
+export const tracksRelations = relations(tracks, ({ many }) => ({
+	groups: many(tracksToGroups),
+}));
+
+export const tracksToGroups = sqliteTable(
+	"tracks_to_groups",
+	{
+		trackId: text("track_id").notNull(),
+		groupId: text("group_id").notNull(),
+		addedBy: text("added_by").notNull(),
+	},
+	(t) => ({
+		pk: primaryKey({ columns: [t.trackId, t.groupId] }),
+	}),
+);
+
+export const tracksToGroupsRelations = relations(tracksToGroups, ({ one }) => ({
+	track: one(tracks, {
+		fields: [tracksToGroups.trackId],
+		references: [tracks.id],
+	}),
+	group: one(groups, {
+		fields: [tracksToGroups.groupId],
+		references: [groups.id],
+	}),
+	addedBy: one(users, {
+		fields: [tracksToGroups.addedBy],
+		references: [users.id],
 	}),
 }));

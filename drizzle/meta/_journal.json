@@ -15,6 +15,13 @@
       "when": 1710678421800,
       "tag": "0001_gray_yellowjacket",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1710852885074,
+      "tag": "0002_optimal_thor_girl",
+      "breakpoints": true
     }
   ]
 }

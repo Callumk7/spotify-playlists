@@ -6,6 +6,14 @@ import {
 } from "@remix-run/cloudflare";
 import { Link, useFetcher, useLoaderData } from "@remix-run/react";
 import { eq } from "drizzle-orm";
+import {
+	Combobox,
+	ComboboxCollection,
+	ComboboxInput,
+	ComboboxItem,
+	ComboboxListBox,
+	ComboboxPopover,
+} from "~/components/jolly/combobox";
 import { MainContainer } from "~/components/main-container";
 import { createDrizzle } from "~/db";
 import { usersToGroups } from "~/db/schema";
@@ -48,12 +56,25 @@ export default function Index() {
 	return (
 		<MainContainer>
 			<h1>Groups</h1>
-			<div className="flex flex-col gap-4">
-				{userGroups.map((group) => (
-					<Link to={`/groups/${group.groupId}`} key={group.groupId}>
-						{group.group.name}
-					</Link>
-				))}
+			<div className="w-4/5 mx-auto my-10">
+				<Combobox>
+					<ComboboxInput placeholder="Select a group" />
+					<ComboboxPopover>
+						<ComboboxListBox>
+							<ComboboxCollection items={userGroups}>
+								{(group) => (
+									<ComboboxItem
+										textValue={group.group.name}
+										id={group.groupId}
+										key={group.groupId}
+									>
+										{group.group.name}
+									</ComboboxItem>
+								)}
+							</ComboboxCollection>
+						</ComboboxListBox>
+					</ComboboxPopover>
+				</Combobox>
 			</div>
 			<div>
 				<fetcher.Form method="POST" action="/groups">
